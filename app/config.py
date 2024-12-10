@@ -14,10 +14,10 @@ class Settings(BaseSettings):
     server_port: int = 8001
     steam_apikey: str = "STEAM_APIKEY"
     database_name: str = "test.db"
-    storage_path: str = "./storage"
+    storage_path: str = "../storage"
 
     class Config:
-        env_file = ".env"
+        env_file = "../.env"
         env_file_encoding = "utf-8"
 
     _upload_dir = None

@@ -7,7 +7,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from libcloud.storage.types import Provider
 from sqlalchemy_file.storage import StorageManager
-from config import settings, get_storage_dir
+from app.config import settings, get_storage_dir
 
 os.makedirs(f"{settings.upload_dir}/avatars", 0o777, exist_ok=True)
 player_container = get_driver(Provider.LOCAL)(settings.upload_dir).get_container("avatars")
