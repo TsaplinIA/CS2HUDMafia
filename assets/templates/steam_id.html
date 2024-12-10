@@ -1,0 +1,53 @@
+<head><meta charset="UTF-8"></head>
+<style>
+    .copy-span {
+        background: #8e97ae;
+        border-radius: 5px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 7px;
+        padding-right: -2px;
+        color: black;
+        font-family: monospace;
+    }
+    .copy-span:hover {
+        background: #606775;
+    }
+    .profile-btn {
+        margin-left: 5px;
+    }
+    .profile-btn:hover .steam-svg-1 {
+        fill: #606775;
+    }
+    .steam-svg-1 {
+        fill: #8e97ae;
+    }
+    .profile-btn-invalid {
+        margin-left: 5px;
+    }
+    .profile-btn-invalid .steam-svg-1 {
+        fill: #eaeaea;
+    }
+
+</style>
+<div class="copy-container">
+    <span class="copy-span" data-toggle="tooltip" data-placement="bottom" title="SHER" style="max-width: 30em;" id="text-to-copy" onclick="copySteam64()">
+        76561198240027748
+    </span>
+    <a class="{{ ('profile-btn' if steam_profile_url else 'profile-btn-invalid') }}" {% if steam_profile_url %} href="{{ steam_profile_url }}" target="_blank" {% endif %}>
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="uLrSEQ" style="margin-top: 3px">
+            <path class="steam-svg-1" d="M.376 11.589C1.483 15.298 4.908 18 8.962 18c4.949 0 8.961-4.03 8.961-9s-4.012-9-8.961-9C4.212 0 .326 3.71.019 8.402c.58.978.807 1.583.357 3.187z">
+            </path>
+            <path class="steam-svg-2" fill="#FFF" d="M8.5 6.746v.044l-2.192 3.2a2.447 2.447 0 0 0-1.47.408L.024 8.408s-.111 1.84.353 3.212l3.404 1.411a2.49 2.49 0 0 0 1.468 1.764 2.482 2.482 0 0 0 3.25-1.345c.137-.332.2-.68.191-1.028l3.138-2.252.077.001c1.878 0 3.404-1.537 3.404-3.425s-1.526-3.424-3.404-3.424c-1.877 0-3.404 1.536-3.404 3.424zm-.526 6.483a1.916 1.916 0 0 1-2.508 1.039 1.91 1.91 0 0 1-.986-.946l1.108.462a1.41 1.41 0 0 0 1.846-.765c.3-.724-.04-1.555-.76-1.857l-1.146-.476a1.907 1.907 0 0 1 2.45 1.068 1.927 1.927 0 0 1-.004 1.475zm3.93-4.201a2.278 2.278 0 0 1-2.268-2.282 2.278 2.278 0 0 1 2.268-2.281 2.278 2.278 0 0 1 2.268 2.28 2.278 2.278 0 0 1-2.268 2.283zm-1.7-2.286a1.71 1.71 0 0 1 1.704-1.714c.94 0 1.704.768 1.704 1.714 0 .947-.764 1.714-1.704 1.714s-1.703-.767-1.703-1.714z">
+            </path>
+        </svg>
+    </a>
+
+</div>
+<script>
+    function copySteam64() {
+        const text = document.getElementById('text-to-copy').textContent;
+        navigator.clipboard.writeText(text);
+        successAlert("SteamID64: " + text + "copied!")
+    }
+</script>

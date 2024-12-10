@@ -1,0 +1,9 @@
+<div style="font-weight: 700; color: black;">
+    {{ (names[0] if names[0] else '-') | truncate(max_name_length, True) }}
+</div>
+<div style="color: black;">
+    {{ (names[1] if names[1] else '-') | truncate(max_name_length, True) }}
+</div>
+<div style="color: gray">
+    {{ (names[2] if names[2] else '-') | truncate(max_name_length, True) }}
+</div>

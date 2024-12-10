@@ -1,0 +1,84 @@
+# Byte-compiled files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# C extensions
+*.so
+
+# Distribution and packaging
+build/
+dist/
+*.egg-info/
+*.eggs/
+pip-wheel-metadata/
+share/python-wheels/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.python-version
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Test results
+.pytest_cache/
+.tox/
+.nox/
+coverage/
+coverage.xml
+*.cover
+.hypothesis/
+nosetests.xml
+test-reports/
+debug.log
+
+# Static analysis tools
+.mypy_cache/
+.dmypy.json
+.pyre/
+
+# IDE and editor settings
+# PyCharm
+.idea/
+*.iml
+# VSCode
+.vscode/
+# Sublime Text
+*.sublime*
+# Vim
+*.swp
+*.swo
+*.vim
+*.vimrc
+# Emacs
+*~
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# macOS files
+._*
+.Spotlight-V100
+.Trashes
+
+# Miscellaneous
+*.sqlite3
+*.log
+*.bak
+*.old
+*.env
+*.env.*.local
+
+storage/*
+!storage/.gitkeep
