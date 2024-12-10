@@ -67,6 +67,3 @@ class Constants(BaseSettings):
 
 
 constants = Constants.load()
-
-if __name__ == '__main__':
-    print(get_template_dir())
