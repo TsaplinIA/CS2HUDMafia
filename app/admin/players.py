@@ -49,6 +49,9 @@ class SteamId64Field(StringField):
         assert isinstance(obj, Player)
         return {"steam_id": obj.steam_id, "steam_profile_url": obj.steam_profile_url}
 
+    def additional_js_links(self, request: Request, action: RequestAction) -> list[str]:
+        return [str(request.url_for("js", path="utils.js"))]
+
 
 @dataclass
 class MergedAvatarsField(BaseField):
