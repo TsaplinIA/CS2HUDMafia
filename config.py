@@ -1,4 +1,3 @@
-import json
 import os
 from json import JSONDecodeError
 
@@ -6,7 +5,8 @@ from pydantic import ValidationError
 from pydantic_settings import BaseSettings
 import logging
 
-constants_logger = logging.getLogger('constants')
+constants_logger = logging.getLogger("constants")
+
 
 class Settings(BaseSettings):
     app_name: str = "CS2HUDMafia"
@@ -17,34 +17,40 @@ class Settings(BaseSettings):
     storage_path: str = "./storage"
 
     class Config:
-        env_file = '.env'
-        env_file_encoding = 'utf-8'
+        env_file = ".env"
+        env_file_encoding = "utf-8"
 
     _upload_dir = None
+
     @property
     def upload_dir(self):
         if self._upload_dir is None:
             self._upload_dir = os.path.join(get_storage_dir(), "upload")
         return self._upload_dir
 
+
 settings = Settings()
+
 
 def get_template_dir() -> str:
     return os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "templates")
+
 
 def get_storage_dir() -> str:
     if os.path.isabs(settings.storage_path):
         return settings.storage_path
     return os.path.join(os.path.dirname(os.path.abspath(__file__)), settings.storage_path)
 
+
 constants_json_file_path: str = os.path.join(get_storage_dir(), "constants.json")
+
 
 class Constants(BaseSettings):
     display_avatars: bool = True
 
     def save(self):
         with open(constants_json_file_path, "w") as file:
-            file.write(self.model_dump_json(indent=4, exclude={'_json_file_path'}))
+            file.write(self.model_dump_json(indent=4, exclude={"_json_file_path"}))
 
     @classmethod
     def load(cls):
@@ -59,21 +65,5 @@ class Constants(BaseSettings):
             else:
                 return obj
 
+
 constants = Constants.load()
-
-    # def __init__(self, json_file_path: str):
-    #     self._json_file_path = None
-    #     display_avatars: bool = True
-
-        # DisplayPlayerAvatars: bool =  True
-        # DisplayTeamFlags: bool =  False
-        # DisplayPlayerFlags: bool =  False
-
-#         if os.path.exists(json_file_path):
-#             with open(json_file_path, 'r') as file:
-#                 data = json.load(file)
-#         else:
-#             with open(json_file_path, 'w') as file:
-#                 file.
-#
-#     def save

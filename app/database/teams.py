@@ -11,32 +11,32 @@ from app.database.base import Base
 
 
 class Team(Base):
-  __tablename__ = "teams"
+    __tablename__ = "teams"
 
-  id: Mapped[int] = mapped_column(primary_key=True)
-  name: Mapped[str]
-  short_name: Mapped[str]
-  logo: Union[File, None] = Column(
-      ImageField(
-        upload_storage="user-avatar",
-        thumbnail_size=(128, 128),
-        validators=[SizeValidator(max_size="5M")],
-      )
-  )
-
-  async def __admin_select2_repr__(self, request: Request) -> str:
-    url = None
-    if self.logo is not None:
-      storage, file_id = self.logo.path.split("/")
-      url = request.url_for(
-        request.app.state.ROUTE_NAME + ":api:file",
-        storage=storage,
-        file_id=file_id,
-      )
-    template_str = (
-      '<div class="d-flex align-items-center"><span class="me-2 avatar'
-      ' avatar-xs"{% if url %} style="background-image:'
-      ' url({{url}});--tblr-avatar-size: 3rem;{%endif%}">{% if not url'
-      " %}obj.full_name[:2]{%endif%}</span>{{obj.name}}({{obj.short_name}})<div>"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+    short_name: Mapped[str]
+    logo: Union[File, None] = Column(
+        ImageField(
+            upload_storage="user-avatar",
+            thumbnail_size=(128, 128),
+            validators=[SizeValidator(max_size="5M")],
+        )
     )
-    return Template(template_str, autoescape=True).render(obj=self, url=url)
+
+    async def __admin_select2_repr__(self, request: Request) -> str:
+        url = None
+        if self.logo is not None:
+            storage, file_id = self.logo.path.split("/")
+            url = request.url_for(
+                request.app.state.ROUTE_NAME + ":api:file",
+                storage=storage,
+                file_id=file_id,
+            )
+        template_str = (
+            '<div class="d-flex align-items-center"><span class="me-2 avatar'
+            ' avatar-xs"{% if url %} style="background-image:'
+            ' url({{url}});--tblr-avatar-size: 3rem;{%endif%}">{% if not url'
+            " %}obj.full_name[:2]{%endif%}</span>{{obj.name}}({{obj.short_name}})<div>"
+        )
+        return Template(template_str, autoescape=True).render(obj=self, url=url)
