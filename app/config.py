@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     storage_path: str = "../storage"
 
     class Config:
-        env_file = "../.env"
+        env_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
         env_file_encoding = "utf-8"
 
     _upload_dir = None
@@ -33,7 +33,7 @@ settings = Settings()
 
 
 def get_template_dir() -> str:
-    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "templates")
+    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "templates")
 
 
 def get_storage_dir() -> str:
@@ -67,3 +67,6 @@ class Constants(BaseSettings):
 
 
 constants = Constants.load()
+
+if __name__ == '__main__':
+    print(get_template_dir())
