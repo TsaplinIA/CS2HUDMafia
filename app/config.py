@@ -1,5 +1,6 @@
 import os
 from json import JSONDecodeError
+from typing import Optional
 
 from pydantic import ValidationError
 from pydantic_settings import BaseSettings
@@ -47,6 +48,9 @@ constants_json_file_path: str = os.path.join(get_storage_dir(), "constants.json"
 
 class Constants(BaseSettings):
     display_avatars: bool = True
+
+    team_left_id: Optional[int] = None
+    team_right_id: Optional[int] = None
 
     def save(self):
         with open(constants_json_file_path, "w") as file:
