@@ -1,6 +1,7 @@
 from starlette.requests import Request
 from starlette_admin.contrib.sqla import Admin as SQLAAdmin
 
+from app.admin.match_page import match_page_view
 from app.admin.players import players_model_view
 from app.admin.teams import teams_model_view
 from app.database import engine
@@ -28,3 +29,6 @@ def init_admin(engine, title="Example: SQLAlchemy", base_url="/"):
 
 
 admin = init_admin(engine, title=settings.app_name)
+
+
+__all__ = ["admin"]
