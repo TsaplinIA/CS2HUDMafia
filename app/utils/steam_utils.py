@@ -33,10 +33,10 @@ async def update_all_players_info_async():
             if data is None:
                 continue
             player.steam_name = data.steam_name
-            player.steam_profile_url = data.steam_profile_url
-            player.steam_avatar_small = data.steam_avatar_small
-            player.steam_avatar_medium = data.steam_avatar_medium
-            player.steam_avatar_full = data.steam_avatar_full
+            player.steam_profile_url = data.steam_profile_url.unicode_string()
+            player.steam_avatar_small = data.steam_avatar_small.unicode_string()
+            player.steam_avatar_medium = data.steam_avatar_medium.unicode_string()
+            player.steam_avatar_full = data.steam_avatar_full.unicode_string()
 
 
 def get_players_info(player_list: Iterable) -> dict[str, SteamPlayerSchema]:
