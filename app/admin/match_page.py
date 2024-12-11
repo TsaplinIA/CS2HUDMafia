@@ -8,9 +8,11 @@ class MatchPage(CustomView):
     async def render(self, request: Request, templates: Jinja2Templates) -> Response:
         return templates.TemplateResponse("match_page.html", {"request": request})
 
+
 class TestPage(CustomView):
     async def render(self, request: Request, templates: Jinja2Templates) -> Response:
         return templates.TemplateResponse("test.html", {"request": request})
+
 
 match_page_view = MatchPage(label="Match")
 test_page_view = TestPage(label="Test")
