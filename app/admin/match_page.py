@@ -3,10 +3,12 @@ from starlette.responses import Response
 from starlette.templating import Jinja2Templates
 from starlette_admin import CustomView
 
+from app.config import constants
+
 
 class MatchPage(CustomView):
     async def render(self, request: Request, templates: Jinja2Templates) -> Response:
-        return templates.TemplateResponse("match_page.html", {"request": request})
+        return templates.TemplateResponse("match_page.html", {"request": request, "constants": constants,})
 
 
 class TestPage(CustomView):
