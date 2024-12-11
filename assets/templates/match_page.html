@@ -1,0 +1,273 @@
+{% extends "layout.html" %}
+{% block header %}
+<div class="d-flex justify-content-between align-items-center">
+    <div class="row g-2 align-items-center">
+        <div class="col">
+            <h2 class="page-title">
+                Match Page
+            </h2>
+        </div>
+    </div>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{{ url_for(__name__ ~ ':index')}}">Admin</a>
+        </li>
+        <li class="breadcrumb-item active">Home</li>
+    </ol>
+</div>
+{% endblock %}
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Latest Posts</h3>
+                </div>
+                <div class="card-body">
+                    <div class="list-group card-list-group">
+                        <div class="row">
+                            <div class="col-10">
+                                <div class="row">
+                                    <div class="col-5">
+                                        <div class="p-2 d-flex align-middle align-items-center justify-content-center">
+                                            <select data-allow-clear="true"
+                                                    data-placeholder="Select Team"
+                                                    id="team_left"
+                                                    name="team"
+                                                    class="form-control team-selector"
+                                                    data-url="{{url_for(request.app.state.ROUTE_NAME, path='api/team')}}"
+                                                    data-pk="id"
+                                            >
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex col-2 align-middle align-items-center justify-content-center">
+                                        <span class="p-2 fa-2xl font-weight-bold">VS</span>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="p-2 d-flex align-middle align-items-center justify-content-center">
+                                            <select data-allow-clear="true"
+                                                    data-placeholder="Select Team"
+                                                    id="team_right"
+                                                    name="team"
+                                                    class="form-control team-selector"
+                                                    data-url="{{url_for(request.app.state.ROUTE_NAME, path='api/team')}}"
+                                                    data-pk="id"
+                                            >
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 p-2 d-flex align-middle align-items-center justify-content-center">
+                                <span class="d-flex align-items-center justify-content-center w-auto h-auto">
+                                    <input class="form-check-input" type="checkbox">
+                                    <span class="fa-xl">auto</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="bg-red row">
+                            <div class="col-10">
+                                <div class="row bg-bitbucket">
+                                    <div class="bg-danger col-5">T</div>
+                                    <div class="bg-danger-lt col-2"><span class=""></span></div>
+                                    <div class="bg-vimeo col-5">CT</div>
+                                </div>
+                            </div>
+                            <div class="bg-azure col-2">
+                                <span>
+                                    <input class="form-check-input" type="checkbox">
+                                    <span>auto</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="bg-blue col">MATCH TYPE:</div>
+                            <div class="col-5">
+                                <div class="bg-green row">BO1, BO2, BO3</div>
+                                <div class="bg-red row">000-000</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 m-lg-0 mt-4">
+            <div class="row row-cards">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Top publishers</h3>
+                        </div>
+                        <div class="card-body">
+<!--                            {% for user in users %}-->
+<!--                            <div class="row g-3 align-items-center mb-3">-->
+<!--                                <a href="#" class="col-auto">-->
+<!--                                <span class="avatar"  {% if user.avatar%}style="background-image: url({{ url_for(__name__ ~ ':api:file', storage=user.avatar.upload_storage,file_id=user.avatar.file_id)}})"{%endif%}>{% if not user.avatar%}{{user.full_name[0]}}{%endif%}</span>-->
+<!--                                </a>-->
+<!--                                <div class="col text-truncate">-->
+<!--                                    <a href="{{ url_for(__name__ ~ ':detail', identity='user',pk=user.id)}}" class="text-reset d-block text-truncate">-->
+<!--                                        {{user.full_name}}</a>-->
+<!--                                    <div class="text-muted text-truncate mt-n1">{{user.posts | length}} posts</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            {%endfor%}-->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-stamp">
+                            <div class="card-stamp-icon bg-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-info-circle"
+                                     width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                    <polyline points="11 12 12 12 12 16 13 16"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <p>
+                                    This page is a <strong>custom home page</strong> which load
+                                    the latest posts and top publishers from database and display them.
+                                </p>
+                                <p>
+                                    For more information, check out the <a href="https://jowilf.github.io/starlette-admin/tutorial/configurations/other-views/#customview">StarletteAdmin doc</a>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<header><link rel="stylesheet" href="{{url_for(request.app.state.ROUTE_NAME ~ ':statics', path='/css/select2.min.css')}}"></header>
+<script type="text/javascript" src="{{url_for(request.app.state.ROUTE_NAME ~ ':statics', path='js/vendor/jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for(request.app.state.ROUTE_NAME ~ ':statics', path='js/vendor/select2.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('js', path='match_page_select2.js')}}"></script>
+<style>
+    .select2-container .select2-selection--single {
+        min-height: calc(3rem + 11px); /* Set desired height */
+        height: auto !important;
+        padding: 5px;
+    }
+    .select2 {
+        width:100%!important;
+    }
+</style>
+{% endblock %}
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Match UI</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            margin: 0;-->
+<!--            padding: 20px;-->
+<!--            box-sizing: border-box;-->
+<!--        }-->
+
+<!--        .container {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+
+<!--        .block {-->
+<!--            border: 1px solid #ccc;-->
+<!--            padding: 20px;-->
+<!--            width: 45%;-->
+<!--            box-sizing: border-box;-->
+<!--        }-->
+
+<!--        .block-header {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            align-items: center;-->
+<!--            margin-bottom: 10px;-->
+<!--        }-->
+
+<!--        .block-header input[type="checkbox"] {-->
+<!--            margin-left: 10px;-->
+<!--        }-->
+
+<!--        .block select {-->
+<!--            width: 100%;-->
+<!--            margin-bottom: 10px;-->
+<!--        }-->
+
+<!--        .image-placeholder {-->
+<!--            height: 100px;-->
+<!--            background-color: #f0f0f0;-->
+<!--            text-align: center;-->
+<!--            line-height: 100px;-->
+<!--            color: #999;-->
+<!--            border: 1px dashed #ccc;-->
+<!--        }-->
+
+<!--        .match-type {-->
+<!--            text-align: center;-->
+<!--        }-->
+
+<!--        .match-type button {-->
+<!--            margin: 0 5px;-->
+<!--            padding: 10px 20px;-->
+<!--            border: 1px solid #ccc;-->
+<!--            background-color: #fff;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+
+<!--        .match-type button.active {-->
+<!--            background-color: #007bff;-->
+<!--            color: #fff;-->
+<!--            border-color: #007bff;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div class="container">-->
+<!--        <div class="block">-->
+<!--            <div class="block-header">-->
+<!--                <h2>NAME 1</h2>-->
+<!--                <div>-->
+<!--                    Auto <input type="checkbox">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <select>-->
+<!--                <option value="">Select...</option>-->
+<!--            </select>-->
+<!--            <div class="image-placeholder">Image</div>-->
+<!--        </div>-->
+
+<!--        <div class="block">-->
+<!--            <div class="block-header">-->
+<!--                <h2>NAME 2</h2>-->
+<!--                <div>-->
+<!--                    Auto <input type="checkbox">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <select>-->
+<!--                <option value="">Select...</option>-->
+<!--            </select>-->
+<!--            <div class="image-placeholder">Image</div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="match-type">-->
+<!--        <button class="active">BO1</button>-->
+<!--        <button>BO2</button>-->
+<!--        <button>BO3</button>-->
+<!--    </div>-->
+<!--</body>-->
+<!--</html>-->

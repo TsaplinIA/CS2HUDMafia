@@ -23,6 +23,7 @@ def init_admin(engine, title="Example: SQLAlchemy", base_url="/"):
     admin.add_view(teams_model_view)
     admin.add_view(players_model_view)
 
+    admin.add_view(match_page_view)
     return admin
 
 
