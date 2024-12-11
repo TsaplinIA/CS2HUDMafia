@@ -152,6 +152,7 @@
 <script type="text/javascript" src="{{url_for(request.app.state.ROUTE_NAME ~ ':statics', path='js/vendor/jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{url_for(request.app.state.ROUTE_NAME ~ ':statics', path='js/vendor/select2.min.js')}}"></script>
 <script type="text/javascript" src="{{url_for('js', path='match_page_select2.js')}}"></script>
+<script type="text/javascript" src="{{url_for('js', path='utils.js')}}"></script>
 <style>
     .select2-container .select2-selection--single {
         min-height: calc(3rem + 11px); /* Set desired height */
@@ -163,111 +164,3 @@
     }
 </style>
 {% endblock %}
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Match UI</title>-->
-<!--    <style>-->
-<!--        body {-->
-<!--            font-family: Arial, sans-serif;-->
-<!--            margin: 0;-->
-<!--            padding: 20px;-->
-<!--            box-sizing: border-box;-->
-<!--        }-->
-
-<!--        .container {-->
-<!--            display: flex;-->
-<!--            justify-content: space-between;-->
-<!--            margin-bottom: 20px;-->
-<!--        }-->
-
-<!--        .block {-->
-<!--            border: 1px solid #ccc;-->
-<!--            padding: 20px;-->
-<!--            width: 45%;-->
-<!--            box-sizing: border-box;-->
-<!--        }-->
-
-<!--        .block-header {-->
-<!--            display: flex;-->
-<!--            justify-content: space-between;-->
-<!--            align-items: center;-->
-<!--            margin-bottom: 10px;-->
-<!--        }-->
-
-<!--        .block-header input[type="checkbox"] {-->
-<!--            margin-left: 10px;-->
-<!--        }-->
-
-<!--        .block select {-->
-<!--            width: 100%;-->
-<!--            margin-bottom: 10px;-->
-<!--        }-->
-
-<!--        .image-placeholder {-->
-<!--            height: 100px;-->
-<!--            background-color: #f0f0f0;-->
-<!--            text-align: center;-->
-<!--            line-height: 100px;-->
-<!--            color: #999;-->
-<!--            border: 1px dashed #ccc;-->
-<!--        }-->
-
-<!--        .match-type {-->
-<!--            text-align: center;-->
-<!--        }-->
-
-<!--        .match-type button {-->
-<!--            margin: 0 5px;-->
-<!--            padding: 10px 20px;-->
-<!--            border: 1px solid #ccc;-->
-<!--            background-color: #fff;-->
-<!--            cursor: pointer;-->
-<!--        }-->
-
-<!--        .match-type button.active {-->
-<!--            background-color: #007bff;-->
-<!--            color: #fff;-->
-<!--            border-color: #007bff;-->
-<!--        }-->
-<!--    </style>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <div class="container">-->
-<!--        <div class="block">-->
-<!--            <div class="block-header">-->
-<!--                <h2>NAME 1</h2>-->
-<!--                <div>-->
-<!--                    Auto <input type="checkbox">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <select>-->
-<!--                <option value="">Select...</option>-->
-<!--            </select>-->
-<!--            <div class="image-placeholder">Image</div>-->
-<!--        </div>-->
-
-<!--        <div class="block">-->
-<!--            <div class="block-header">-->
-<!--                <h2>NAME 2</h2>-->
-<!--                <div>-->
-<!--                    Auto <input type="checkbox">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <select>-->
-<!--                <option value="">Select...</option>-->
-<!--            </select>-->
-<!--            <div class="image-placeholder">Image</div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <div class="match-type">-->
-<!--        <button class="active">BO1</button>-->
-<!--        <button>BO2</button>-->
-<!--        <button>BO3</button>-->
-<!--    </div>-->
-<!--</body>-->
-<!--</html>-->

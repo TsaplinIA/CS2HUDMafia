@@ -16,3 +16,36 @@ function copySteam64(steamID64) {
             alert("Failed to copy SteamID64. Please try again.");
         });
 }
+
+async function sendConstants(fields) {
+    // Determine the base URL dynamically
+    const baseUrl = window.location.origin;
+    const endpointUrl = `${baseUrl}/constants/`;
+
+    // Validate input
+    if (typeof fields !== 'object' || fields === null) {
+        throw new Error("Fields should be an object with field_name and value pairs.");
+    }
+
+    try {
+        const response = await fetch(endpointUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(fields)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Error ${response.status}: ${errorData.detail || response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error("Failed to send constants:", error);
+        throw error;
+    }
+}

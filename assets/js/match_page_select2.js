@@ -68,3 +68,29 @@ $("select.team-selector", document).each(function () {
             }
       });
   });
+
+const handleTeamChange = ($selector, key) => {
+    // Функция отправки данных
+    const sendTeamData = () => {
+        const selectedValue = $selector.val(); // Получаем выбранное значение
+        const processedValue = selectedValue ? Number(selectedValue) : null; // Преобразуем в число или null
+        const payload = { [key]: processedValue }; // Формируем объект payload
+        console.log('Sending payload:', payload); // Логируем payload
+        sendConstants(payload); // Отправляем данные
+    };
+
+    // Обработчик изменения
+    $selector.on("change", function () {
+        sendTeamData(); // Отправляем данные при изменении
+    });
+
+    // Возвращаем функцию отправки, чтобы её можно было вызвать в произвольный момент
+    return sendTeamData;
+};
+
+const $left_team_selector = $("#team_left", document);
+const $right_team_selector = $("#team_right", document);
+
+// Привязываем обработчики изменения
+const sendLeftTeamData = handleTeamChange($left_team_selector, "team_left_id");
+const sendRightTeamData = handleTeamChange($right_team_selector, "team_right_id");
