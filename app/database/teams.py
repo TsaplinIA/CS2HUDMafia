@@ -42,6 +42,17 @@ class Team(Base):
             </span>
             {{ obj.name }} ({{ obj.short_name }})
         </div>
+        <style>
+        /* additional_css_problem */
+        .select2-container .select2-selection--single {
+            min-height: calc(3rem + 11px); 
+            height: auto !important;
+            padding: 5px;
+        }
+        .select2 {
+            width:100%!important;
+        }
+        </style>
         """
 
         return Template(template_str, autoescape=True).render(obj=self, url=(url or default_url))
