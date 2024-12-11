@@ -63,7 +63,7 @@
                             </div>
                             <div class="col-2 p-2 d-flex align-middle align-items-center justify-content-center">
                                 <span class="d-flex align-items-center justify-content-center w-auto h-auto">
-                                    <input class="form-check-input" type="checkbox">
+                                    <input class="form-check-input" type="checkbox" id="team_auto_detect">
                                     <span class="fa-xl">auto</span>
                                 </span>
                             </div>
@@ -152,6 +152,7 @@
 <script type="text/javascript" src="{{url_for(request.app.state.ROUTE_NAME ~ ':statics', path='js/vendor/jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{url_for(request.app.state.ROUTE_NAME ~ ':statics', path='js/vendor/select2.min.js')}}"></script>
 <script type="text/javascript" src="{{url_for('js', path='match_page_select2.js')}}"></script>
+<script type="text/javascript" src="{{url_for('js', path='match_page.js')}}"></script>
 <script type="text/javascript" src="{{url_for('js', path='utils.js')}}"></script>
 <style>
     .select2-container .select2-selection--single {

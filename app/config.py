@@ -51,6 +51,7 @@ class Constants(BaseSettings):
 
     team_left_id: Optional[int] = None
     team_right_id: Optional[int] = None
+    team_auto_detect: bool = False
 
     def save(self):
         with open(constants_json_file_path, "w") as file:
