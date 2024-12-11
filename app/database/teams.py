@@ -33,10 +33,15 @@ class Team(Base):
                 storage=storage,
                 file_id=file_id,
             )
-        template_str = (
-            '<div class="d-flex align-items-center"><span class="me-2 avatar'
-            ' avatar-xs"{% if url %} style="background-image:'
-            ' url({{url}});--tblr-avatar-size: 3rem;{%endif%}">{% if not url'
-            " %}obj.full_name[:2]{%endif%}</span>{{obj.name}}({{obj.short_name}})<div>"
-        )
-        return Template(template_str, autoescape=True).render(obj=self, url=url)
+        default_url = "https://avatars.fastly.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg"
+        template_str = """
+        <div class="d-flex align-items-center">
+            <span class="me-2 avatar avatar-xs" 
+                style="background-image: url({{url}}); --tblr-avatar-size: 3rem;">
+                {% if not url %}{{ obj.full_name[:2] }}{% endif %}
+            </span>
+            {{ obj.name }} ({{ obj.short_name }})
+        </div>
+        """
+
+        return Template(template_str, autoescape=True).render(obj=self, url=(url or default_url))
