@@ -16,12 +16,7 @@ def task(func):
         scheduler_logger.debug(func.__name__)
         try:
             if asyncio.iscoroutinefunction(func):
-                event_loop = asyncio.get_event_loop()
-                if event_loop.is_running():
-                    task = event_loop.create_task(func(*args, **kwargs))
-                    task.result()
-                else:
-                    event_loop.run_until_complete(func(*args, **kwargs))
+                asyncio.run(func(*args, **kwargs))
             else:
                 func(*args, **kwargs)
         except Exception as e:
