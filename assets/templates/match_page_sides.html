@@ -1,15 +1,53 @@
-<div class="bg-red row">
+<style>
+    .team-t {
+        background-image: url("{{ url_for('icons', path='logo_t_default.png') }}");
+    }
+    .team-ct {
+        background-image: url("{{ url_for('icons', path='logo_ct_default.png') }}");
+    }
+    .toggle-btn {
+        background-size: cover; /* Масштабировать изображение, чтобы заполнить контейнер */
+        background-position: center; /* Центрировать изображение */
+        background-repeat: no-repeat;
+        cursor: pointer;
+        pointer-events: auto;
+    }
+    .toggle-btn.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+</style>
+<div class="row">
     <div class="col-10">
-        <div class="row bg-bitbucket">
-            <div class="bg-danger col-5">T</div>
-            <div class="bg-danger-lt col-2"><span class=""></span></div>
-            <div class="bg-vimeo col-5">CT</div>
+        <div class="row">
+            <div class="col-5">
+                <div class="p-2 d-flex align-middle align-items-center justify-content-center">
+                    <span class="toggle-btn w-4 h-4 rounded-circle
+                    {% if constants.attack_team == 'team_left' %}team-t{% else %}team-ct{% endif %}
+                    {% if constants.team_side_auto_detect %}disabled{% endif %}"
+                    id="left_team_side"
+                    ></span>
+                </div>
+            </div>
+
+            <div class="col-2"><span class=""></span></div>
+            <div class="col-5">
+                <div class="p-2 d-flex align-middle align-items-center justify-content-center">
+                    <span class="toggle-btn w-4 h-4 rounded-circle
+                    {% if constants.attack_team == 'team_left' %}team-ct{% else %}team-t{% endif %}
+                    {% if constants.team_side_auto_detect %}disabled{% endif %}"
+                    id="right_team_side"
+                    ></span>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="bg-azure col-2">
-        <span>
-            <input class="form-check-input" type="checkbox">
-            <span>auto</span>
-        </span>
-    </div>
+    <div class="col-2 p-2 d-flex align-middle align-items-center justify-content-center">
+    <span class="d-flex align-items-center justify-content-center w-auto h-auto">
+      <input class="form-check-input" type="checkbox" id="team_side_auto_detect"
+      {% if constants.team_side_auto_detect %}checked{% endif %}
+      >
+      <span class="fa-xl">auto</span>
+    </span>
+  </div>
 </div>

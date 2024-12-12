@@ -25,6 +25,7 @@ def init_app():
     app = FastAPI(lifespan=lifespan)
     app.mount("/js", StaticFiles(directory="assets/js"), name="js")
     app.mount("/css", StaticFiles(directory="assets/css"), name="css")
+    app.mount("/icons", StaticFiles(directory="assets/icons"), name="icons")
     app.include_router(constants_router)
     admin.mount_to(app)
     return app

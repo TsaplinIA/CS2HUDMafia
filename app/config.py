@@ -1,6 +1,6 @@
 import os
 from json import JSONDecodeError
-from typing import Optional
+from typing import Optional, Literal
 
 from pydantic import ValidationError
 from pydantic_settings import BaseSettings
@@ -52,6 +52,24 @@ class Constants(BaseSettings):
     team_left_id: Optional[int] = None
     team_right_id: Optional[int] = None
     team_auto_detect: bool = False
+
+    team_side_auto_detect: bool = False
+    team_left_side: Literal['attack', 'defence'] = 'attack'
+
+    @property
+    def team_right_side(self):
+        sides = {'attack', 'defence'}
+        sides.remove(self.team_left_side)
+        assert len(sides) == 1
+        return sides.pop()
+
+    def __setattr__(self, key, value):
+        if key == 'team_right_side':
+            sides = {'attack', 'defence'}
+            assert value in sides
+            sides.remove(value)
+            key, value = 'team_left_side', sides.pop()
+        super().__setattr__(key, value)
 
     def save(self):
         with open(constants_json_file_path, "w") as file:
