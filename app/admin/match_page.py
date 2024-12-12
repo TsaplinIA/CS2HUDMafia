@@ -16,5 +16,5 @@ class TestPage(CustomView):
         return templates.TemplateResponse("test.html", {"request": request})
 
 
-match_page_view = MatchPage(label="Match")
+match_page_view = MatchPage(label="Match", path="/match_page")
 test_page_view = TestPage(label="Test")
