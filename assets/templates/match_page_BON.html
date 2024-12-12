@@ -1,0 +1,90 @@
+<div class="row">
+    <div class="col-10">
+        <div class="row d-flex align-middle align-items-center justify-content-center">
+            <div class="container w-auto">
+               <div class="d-flex gap-4 align-middle align-items-center justify-content-center" role="group" aria-label="Button selector">
+                    <input type="radio" class="btn-check" name="options" id="btn-match-type-bo1" autocomplete="off"
+                    {% if constants.match_type == 'bo1' %}checked{% endif %}
+                    >
+                    <label class="btn btn-outline-secondary" for="btn-match-type-bo1">BO1</label>
+
+                    <input type="radio" class="btn-check" name="options" id="btn-match-type-bo3" autocomplete="off"
+                    {% if constants.match_type == 'bo3' %}checked{% endif %}
+                    >
+                    <label class="btn btn-outline-secondary" for="btn-match-type-bo3">BO3</label>
+
+                    <input type="radio" class="btn-check" name="options" id="btn-match-type-bo5" autocomplete="off"
+                    {% if constants.match_type == 'bo5' %}checked{% endif %}
+                    >
+                    <label class="btn btn-outline-secondary" for="btn-match-type-bo5">BO5</label>
+                </div>
+            </div>
+        </div>
+        <!--------------------------------------------------------------------------------->
+        <div
+                class="row d-flex justify-content-center align-items-center h-auto mt-2
+                {% if constants.match_type == 'bo1' %}d-none{% endif %}"
+                id="map-counters-block"
+        >
+            <div class="row d-flex justify-content-center align-items-center h-auto">
+                <button class="btn btn-outline-secondary d-flex gap-2 w-auto p-1" id="left-map-counter">
+                    <span id="left-circle-3" class="w-3 h-3 rounded-circle map-counter pointer-events-none"></span>
+                    <span id="left-circle-2" class="w-3 h-3 rounded-circle map-counter pointer-events-none"></span>
+                    <span id="left-circle-1" class="w-3 h-3 rounded-circle map-counter pointer-events-none"></span>
+                </button>
+                <div class="text-center px-3 h-auto w-auto" style="color: var(--tblr-secondary);">-</div>
+                <button class="btn btn-outline-secondary d-flex gap-2 w-auto p-1" id="right-map-counter">
+                    <span id="right-circle-1" class="w-3 h-3 rounded-circle map-counter pointer-events-none"></span>
+                    <span id="right-circle-2" class="w-3 h-3 rounded-circle map-counter pointer-events-none"></span>
+                    <span id="right-circle-3" class="w-3 h-3 rounded-circle map-counter pointer-events-none"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+    </div>
+</div>
+<style>
+    .btn-check:checked + .btn {
+        border-color: transparent !important; /* Убираем цвет рамки */
+    }
+    /*.map-counter:active{*/
+    /*    border-color: transparent !important;*/
+    /*}*/
+    .map-counter {
+        background-color: rgba(var(--tblr-secondary-rgb), 0);
+        border: 1px solid;
+        border-color: rgba(var(--tblr-secondary-rgb), 1);
+        transition: background-color 0.3s ease;
+    }
+    .map-counter.active {
+        background-color: rgba(var(--tblr-secondary-rgb), 1);
+    }
+    .btn-outline-secondary:hover .map-counter {
+        background-color: rgba(var(--tblr-secondary-rgb), 1);
+        border-color: white;
+    }
+
+    .btn-outline-secondary:hover .map-counter.active {
+        background-color: white;
+    }
+
+</style>
+<script>
+window.onload = function () {
+    if (typeof leftMapCounterHandler !== 'undefined' && typeof rightMapCounterHandler !== 'undefined') {
+        {% if constants.match_type == 'bo3' %}
+            leftMapCounterHandler.setVisibleCountByValue(2);
+            rightMapCounterHandler.setVisibleCountByValue(2);
+        {% elif constants.match_type == 'bo5' %}
+            leftMapCounterHandler.setVisibleCountByValue(3);
+            rightMapCounterHandler.setVisibleCountByValue(3);
+        {% endif %}
+
+        leftMapCounterHandler.setActiveCountByValue(Number("{{ constants.left_team_map_count }}"));
+        rightMapCounterHandler.setActiveCountByValue(Number("{{ constants.right_team_map_count }}"));
+    } else {
+        console.error("Dependent scripts are not loaded properly!");
+    }
+};
+</script>

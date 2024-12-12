@@ -75,10 +75,91 @@ const switchTeamSides = () => {
 };
 
 $left_team_side_input.click(function () {
-    switchTeamSides()
+    switchTeamSides();
     sendConstants(getTeamSideData());
 });
 $right_team_side_input.click(function () {
-    switchTeamSides()
+    switchTeamSides();
     sendConstants(getTeamSideData());
 });
+
+// -----------------------------------------------------------------------------------------------
+const handleMapCounter = ($input, key) => {
+    const mapCounterCircles = $input.find(".map-counter")
+    const getMapCountData = () => {
+        const visibleCircles = mapCounterCircles.filter(":visible");
+        const activeCircles = visibleCircles.filter(".active");
+        return activeCircles.length
+    }
+    const getMapCountPayload = () => {
+        return {[key]: getMapCountData()}
+    }
+
+    const setActiveCountByValue = (map_count) => {
+        const max_count = mapCounterCircles.filter(":visible").length;
+        mapCounterCircles.map(function () {
+            const circle = $(this)
+            const circle_number = Number(
+                circle.attr('id')
+                .replace('left-circle-', '')
+                .replace('right-circle-', '')
+            );
+            circle.toggleClass('active', ((circle_number <= map_count) && (circle_number <= max_count)));
+        });
+    }
+
+    const setVisibleCountByValue = (circle_count) => {
+        mapCounterCircles.map(function () {
+            const circle = $(this)
+            const circle_number = Number(
+                circle.attr('id')
+                    .replace('left-circle-', '')
+                    .replace('right-circle-', '')
+            );
+            circle.prop('hidden', circle_number > circle_count);
+        });
+    }
+
+    $input.click( function () {
+        const max_count = mapCounterCircles.filter(":visible").length;
+        const next_map_count = getMapCountData() + 1;
+        next_map_count <= max_count ? setActiveCountByValue(next_map_count) : setActiveCountByValue(0)
+        sendConstants(getMapCountPayload())
+    });
+
+    // Возвращаем функцию отправки, чтобы её можно было вызвать в произвольный момент
+    return {
+        getMapCountData,
+        getMapCountPayload,
+        setActiveCountByValue,
+        setVisibleCountByValue,
+    };
+};
+
+const leftMapCounterHandler = handleMapCounter($('#left-map-counter'), 'left_team_map_count');
+const rightMapCounterHandler = handleMapCounter($('#right-map-counter'), 'right_team_map_count');
+const mapCountersBlock = $('#map-counters-block');
+$("#btn-match-type-bo1, #btn-match-type-bo3, #btn-match-type-bo5").click(function () {
+    const match_type = this.id.replace('btn-match-type-', ''),
+          left_map_count = leftMapCounterHandler.getMapCountData(),
+          right_map_count = rightMapCounterHandler.getMapCountData();
+    mapCountersBlock.toggleClass('d-none', match_type === 'bo1');
+
+    let payload = { match_type , 'left_team_map_count': 0, 'right_team_map_count': 0};
+
+    if (['bo3', 'bo5'].includes(match_type)) {
+        const visibleCount = match_type === 'bo3' ? 2 : 3;
+        leftMapCounterHandler.setVisibleCountByValue(visibleCount);
+        rightMapCounterHandler.setVisibleCountByValue(visibleCount);
+        leftMapCounterHandler.setActiveCountByValue(left_map_count);
+        rightMapCounterHandler.setActiveCountByValue(right_map_count);
+        payload = {
+            ...payload,
+            ...leftMapCounterHandler.getMapCountPayload(),
+            ...rightMapCounterHandler.getMapCountPayload()
+        };
+    }
+    sendConstants(payload);
+});
+
+

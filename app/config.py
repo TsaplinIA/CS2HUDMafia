@@ -56,6 +56,10 @@ class Constants(BaseSettings):
     team_side_auto_detect: bool = False
     team_left_side: Literal['attack', 'defence'] = 'attack'
 
+    match_type: Literal['bo1', 'bo3', 'bo5'] = 'bo5'
+    left_team_map_count: int = 0
+    right_team_map_count: int = 0
+
     @property
     def team_right_side(self):
         sides = {'attack', 'defence'}
