@@ -45,9 +45,9 @@ def get_players_info(player_list: Iterable) -> dict[str, SteamPlayerSchema]:
     for players in chunk_iterable(player_list, 50):
         req = requests.models.PreparedRequest()
         req.prepare_url(GET_PLAYER_SUMMARIES_URL, params={"key": settings.steam_apikey, "steamids": ",".join(players)})
-        while (resp := requests.get(req.url)).status_code != 200:
+        if (resp := requests.get(req.url)).status_code != 200:
             steam_logger.warning(f"GET_PLAYER_SUMMARIES status is {resp.status_code}, text: {resp.text}")
-            sleep(1)
+            continue
         resp = requests.get(req.url)
         for steam_player in SteamPlayerListSchema.validate_python(resp.json()["response"]["players"]):
             result[steam_player.steam_id] = steam_player
