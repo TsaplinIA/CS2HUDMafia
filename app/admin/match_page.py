@@ -8,7 +8,13 @@ from app.config import constants
 
 class MatchPage(CustomView):
     async def render(self, request: Request, templates: Jinja2Templates) -> Response:
-        return templates.TemplateResponse("match_page.html", {"request": request, "constants": constants,})
+        return templates.TemplateResponse(
+            "match_page.html",
+            {
+                "request": request,
+                "constants": constants,
+            },
+        )
 
 
 class TestPage(CustomView):

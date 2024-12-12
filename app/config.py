@@ -54,25 +54,25 @@ class Constants(BaseSettings):
     team_auto_detect: bool = False
 
     team_side_auto_detect: bool = False
-    team_left_side: Literal['attack', 'defence'] = 'attack'
+    team_left_side: Literal["attack", "defence"] = "attack"
 
-    match_type: Literal['bo1', 'bo3', 'bo5'] = 'bo5'
+    match_type: Literal["bo1", "bo3", "bo5"] = "bo5"
     left_team_map_count: int = 0
     right_team_map_count: int = 0
 
     @property
     def team_right_side(self):
-        sides = {'attack', 'defence'}
+        sides = {"attack", "defence"}
         sides.remove(self.team_left_side)
         assert len(sides) == 1
         return sides.pop()
 
     def __setattr__(self, key, value):
-        if key == 'team_right_side':
-            sides = {'attack', 'defence'}
+        if key == "team_right_side":
+            sides = {"attack", "defence"}
             assert value in sides
             sides.remove(value)
-            key, value = 'team_left_side', sides.pop()
+            key, value = "team_left_side", sides.pop()
         super().__setattr__(key, value)
 
     def save(self):
