@@ -33,6 +33,14 @@ class Settings(BaseSettings):
 settings = Settings()
 
 
+def get_assets_dir() -> str:
+    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets")
+
+
+def get_huds_dir() -> str:
+    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "huds")
+
+
 def get_template_dir() -> str:
     return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "templates")
 
