@@ -10,4 +10,15 @@ class SteamPlayerSchema(BaseModel):
     steam_avatar_full: AnyHttpUrl = Field(validation_alias=AliasChoices("avatarfull", "steam_avatar_full"))
 
 
+class PlayerSchema(BaseModel):
+    id: int = Field(validation_alias=AliasChoices("id", "_id"))
+    steam_id: str = Field(validation_alias=AliasChoices("steamid", "steam_id", "sid"))
+    real_name: str | None = Field(default=None)
+    displayed_name: str | None = Field(default=None)
+    team_id: int | None = Field(default=None)
+    country_code: str | None = Field(default="default")
+    avatar_url: str | None = Field(default=None)
+    steam_avatar_url: str | None = Field(default=None)
+
+
 SteamPlayerListSchema = TypeAdapter(list[SteamPlayerSchema])
