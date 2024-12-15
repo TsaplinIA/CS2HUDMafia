@@ -7,6 +7,7 @@ from app.api.constants import constants_router
 from app.database import Base, engine
 from fastapi.staticfiles import StaticFiles
 
+from app.huds_app import hud_router
 from app.logging import init_logging_config
 from app.scheduler import init_scheduler
 
@@ -24,11 +25,20 @@ async def lifespan(app: FastAPI):
 def init_app():
     Base.metadata.create_all(engine)
     app = FastAPI(lifespan=lifespan)
-    app.mount("/js", StaticFiles(directory="assets/js"), name="js")
-    app.mount("/css", StaticFiles(directory="assets/css"), name="css")
-    app.mount("/icons", StaticFiles(directory="assets/icons"), name="icons")
     init_logging_config()
+
+    sio = socketio.AsyncServer(async_mode="asgi", cors_allowed_origins="*")
+    app.mount("/socket.io", socketio.ASGIApp(sio))
+    app.sio = sio
+
+    app.mount("/js", StaticFiles(directory=os.path.join(get_assets_dir(), "js")), name="js")
+    app.mount("/css", StaticFiles(directory=os.path.join(get_assets_dir(), "css")), name="css")
+    app.mount("/icons", StaticFiles(directory=os.path.join(get_assets_dir(), "icons")), name="icons")
+    app.mount("/static/huds", StaticFiles(directory=get_huds_dir()), name="huds")
+    app.mount("/files", StaticFiles(directory=os.path.join(get_assets_dir(), "files")), name="files")
+
     app.include_router(constants_router)
+    app.include_router(hud_router)
     admin.mount_to(app)
     return app
 
