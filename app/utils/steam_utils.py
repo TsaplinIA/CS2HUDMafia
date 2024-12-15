@@ -3,7 +3,6 @@ import logging
 from collections import deque
 from collections.abc import Iterable
 from itertools import islice
-from time import sleep
 
 import aiohttp
 import requests

@@ -1,4 +1,3 @@
-import json
 import os
 
 from collections import deque
@@ -6,7 +5,6 @@ from dataclasses import dataclass, field
 from os import PathLike
 from pathlib import Path
 import urllib.parse
-from timeit import timeit
 
 import msgspec.json
 from sqlalchemy import Sequence
