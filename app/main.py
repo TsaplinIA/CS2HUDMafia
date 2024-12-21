@@ -14,7 +14,7 @@ from app.database import Base, engine
 from fastapi.staticfiles import StaticFiles
 
 from app.huds_app import hud_router
-from app.logging import init_logging_config
+from app.logging_filters import init_logging_config
 from app.scheduler import init_scheduler
 
 

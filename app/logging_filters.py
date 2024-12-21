@@ -1,4 +1,5 @@
 import logging
+import logging.config
 
 logging_config = {
     "version": 1,
@@ -14,6 +15,11 @@ logging_config = {
             "class": "logging.StreamHandler",
         },
     },
+    "filters": {
+        "exclude_endpoint_filter": {
+            "()": "app.logging_filters.ExcludeEndpointFilter",
+        },
+    },
     "loggers": {
         "uvicorn.access": {
             "handlers": ["default"],
@@ -22,19 +28,14 @@ logging_config = {
             "filters": ["exclude_endpoint_filter"],
         },
     },
-    "filters": {
-        "exclude_endpoint_filter": {
-            "()": "app.logging.ExcludeEndpointFilter",
-        },
-    },
 }
-
 
 class ExcludeEndpointFilter(logging.Filter):
     def filter(self, record):
-        excluded_endpoints = ["/gsi/hud"]
+        excluded_endpoints = [
+            "/gsi/hud",
+        ]
         return not any(endpoint in record.getMessage() for endpoint in excluded_endpoints)
-
 
 def init_logging_config():
     logging.config.dictConfig(logging_config)
