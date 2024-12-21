@@ -68,6 +68,8 @@ class Constants(BaseSettings):
     left_team_map_count: int = 0
     right_team_map_count: int = 0
 
+    fake_loop_enabled: bool = True
+
     @property
     def team_right_side(self):
         sides = {"attack", "defence"}
