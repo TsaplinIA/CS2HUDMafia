@@ -4,16 +4,10 @@
     <div class="row g-2 align-items-center">
         <div class="col">
             <h2 class="page-title">
-                Video Player
+                Videoplayer
             </h2>
         </div>
     </div>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="{{ url_for(__name__ ~ ':index')}}">Admin</a>
-        </li>
-        <li class="breadcrumb-item active">Home</li>
-    </ol>
 </div>
 {% endblock %}
 {% block content %}
@@ -21,9 +15,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Latest Posts</h3>
-            </div>
+            <div class="card-header"></div>
             <div class="card-body">
 
                 {# ---- ВИДЕО + HUD В ОДНОМ КОНТЕЙНЕРЕ ---- #}
@@ -51,9 +43,9 @@
     const EVENTS_URL = '/files/video/dump_sync.json';  // JSON с событиями
     const POST_URL = '/gsi/hud'; // Куда шлём POST
 
-    let events = [];      // [{ frame, time, payload, id }, ...]
-    let sentIds = new Set();
-    let lastTime = 0;
+    let events = [];          // [{ frame, time, payload, id }, ...] — будет отсортирован
+    let videoFps = 25;
+    let nextEventIndex = 0;   // указатель на следующее событие, которое надо отправить
 
     function log(msg) {
       const el = document.getElementById('log');
@@ -78,58 +70,66 @@
       }
     }
 
-    function setupWithVideoFrameCallback(video, fps) {
+    // Считаем все события, чей frame <= currentFrame, в правильном порядке
+    function processFrame(currentFrame) {
+      while (nextEventIndex < events.length &&
+             events[nextEventIndex].frame <= currentFrame) {
+        const e = events[nextEventIndex];
+        sendPost(e.payload, e.id);
+        nextEventIndex++;
+      }
+    }
+
+    // Находим индекс первого события с frame >= targetFrame
+    function resetPointerToFrame(targetFrame) {
+      let lo = 0;
+      let hi = events.length;
+      while (lo < hi) {
+        const mid = (lo + hi) >> 1;
+        if (events[mid].frame < targetFrame) {
+          lo = mid + 1;
+        } else {
+          hi = mid;
+        }
+      }
+      nextEventIndex = lo;
+      log(`Seek: перенос указателя на событие #${nextEventIndex} (frame >= ${targetFrame})`);
+    }
+
+    function setupWithVideoFrameCallback(video) {
       log('Используем requestVideoFrameCallback (точно по кадрам)');
 
-      const eventsByFrame = new Map();
-      events.forEach(e => {
-        eventsByFrame.set(e.frame, e);
-      });
-
       const callback = (now, metadata) => {
-        const currentFrame = metadata.presentedFrames; // растущий счётчик кадров
-        const event = eventsByFrame.get(currentFrame);
-        if (event && !sentIds.has(event.id)) {
-          sentIds.add(event.id);
-          sendPost(event.payload, event.id);
-        }
+        // ВАЖНО: используем mediaTime, а не presentedFrames
+        const currentTime = metadata.mediaTime; // в секундах
+        const currentFrame = Math.round(currentTime * videoFps);
+        processFrame(currentFrame);
         video.requestVideoFrameCallback(callback);
       };
 
       video.requestVideoFrameCallback(callback);
 
-      video.addEventListener('seeking', () => {
-        sentIds.clear();
-        log('Перемотка: сбрасываем отправленные события');
+      // При завершении seek — пересчитываем указатель
+      video.addEventListener('seeked', () => {
+        const t = video.currentTime;
+        const frame = Math.round(t * videoFps);
+        resetPointerToFrame(frame);
       });
     }
 
-    function setupWithTimeupdate(video, fps) {
+    function setupWithTimeupdate(video) {
       log('Fallback: используем timeupdate (примерно по времени)');
-
-      events.forEach(e => {
-        if (e.time == null && typeof e.frame === 'number') {
-          e.time = e.frame / fps;
-        }
-      });
 
       video.addEventListener('timeupdate', () => {
         const t = video.currentTime;
+        const currentFrame = Math.round(t * videoFps);
+        processFrame(currentFrame);
+      });
 
-        if (t < lastTime - 0.1) {
-          sentIds.clear();
-          log('Перемотка назад: сбрасываем отправленные события');
-        }
-        lastTime = t;
-
-        const EPS = 0.05;
-
-        events.forEach(e => {
-          if (!sentIds.has(e.id) && Math.abs(t - e.time) <= EPS) {
-            sentIds.add(e.id);
-            sendPost(e.payload, e.id);
-          }
-        });
+      video.addEventListener('seeked', () => {
+        const t = video.currentTime;
+        const frame = Math.round(t * videoFps);
+        resetPointerToFrame(frame);
       });
     }
 
@@ -138,7 +138,7 @@
 
       const res = await fetch(EVENTS_URL);
       const data = await res.json();
-      const fps = data.fps || 25;
+      videoFps = data.fps || 25;
 
       events = data.events.map((e, idx) => ({
         frame: e.frame,
@@ -147,12 +147,16 @@
         id: e.id || `event_${idx}_frame_${e.frame}`
       }));
 
-      log(`Загружено событий: ${events.length}, fps = ${fps}`);
+      // Сортируем по frame на всякий случай
+      events.sort((a, b) => a.frame - b.frame);
+      nextEventIndex = 0;
+
+      log(`Загружено событий: ${events.length}, fps = ${videoFps}`);
 
       if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
-        setupWithVideoFrameCallback(video, fps);
+        setupWithVideoFrameCallback(video);
       } else {
-        setupWithTimeupdate(video, fps);
+        setupWithTimeupdate(video);
       }
     }
 
