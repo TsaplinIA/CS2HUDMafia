@@ -1,0 +1,199 @@
+{% extends "layout.html" %}
+{% block header %}
+<div class="d-flex justify-content-between align-items-center">
+    <div class="row g-2 align-items-center">
+        <div class="col">
+            <h2 class="page-title">
+                Video Player
+            </h2>
+        </div>
+    </div>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{{ url_for(__name__ ~ ':index')}}">Admin</a>
+        </li>
+        <li class="breadcrumb-item active">Home</li>
+    </ol>
+</div>
+{% endblock %}
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Latest Posts</h3>
+            </div>
+            <div class="card-body">
+
+                {# ---- ВИДЕО + HUD В ОДНОМ КОНТЕЙНЕРЕ ---- #}
+                <div class="video-hud-wrapper">
+                    <video id="video" src="/files/video/trimed.mp4" controls></video>
+
+                    {# HUD-страница, рендерящаяся в 1920x1080 и скейлящаяся вместе с видео #}
+                    <iframe
+                        id="hud-frame"
+                        src="/huds/JT"      {# подставь свой URL #}
+                        frameborder="0"
+                        allowtransparency="true"
+                        scrolling="no">
+                    </iframe>
+                </div>
+                {# ---- /ВИДЕО + HUD ---- #}
+
+                <div id="log"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const EVENTS_URL = '/files/video/dump_sync.json';  // JSON с событиями
+    const POST_URL = '/gsi/hud'; // Куда шлём POST
+
+    let events = [];      // [{ frame, time, payload, id }, ...]
+    let sentIds = new Set();
+    let lastTime = 0;
+
+    function log(msg) {
+      const el = document.getElementById('log');
+      const time = new Date().toLocaleTimeString();
+      el.innerHTML = `[${time}] ${msg}<br>` + el.innerHTML;
+    }
+
+    async function sendPost(payload, id) {
+      try {
+        const res = await fetch(POST_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          log(`POST ${id} вернул статус ${res.status}`);
+        } else {
+          log(`POST отправлен для ${id}`);
+        }
+      } catch (e) {
+        log(`Ошибка POST для ${id}: ${e}`);
+      }
+    }
+
+    function setupWithVideoFrameCallback(video, fps) {
+      log('Используем requestVideoFrameCallback (точно по кадрам)');
+
+      const eventsByFrame = new Map();
+      events.forEach(e => {
+        eventsByFrame.set(e.frame, e);
+      });
+
+      const callback = (now, metadata) => {
+        const currentFrame = metadata.presentedFrames; // растущий счётчик кадров
+        const event = eventsByFrame.get(currentFrame);
+        if (event && !sentIds.has(event.id)) {
+          sentIds.add(event.id);
+          sendPost(event.payload, event.id);
+        }
+        video.requestVideoFrameCallback(callback);
+      };
+
+      video.requestVideoFrameCallback(callback);
+
+      video.addEventListener('seeking', () => {
+        sentIds.clear();
+        log('Перемотка: сбрасываем отправленные события');
+      });
+    }
+
+    function setupWithTimeupdate(video, fps) {
+      log('Fallback: используем timeupdate (примерно по времени)');
+
+      events.forEach(e => {
+        if (e.time == null && typeof e.frame === 'number') {
+          e.time = e.frame / fps;
+        }
+      });
+
+      video.addEventListener('timeupdate', () => {
+        const t = video.currentTime;
+
+        if (t < lastTime - 0.1) {
+          sentIds.clear();
+          log('Перемотка назад: сбрасываем отправленные события');
+        }
+        lastTime = t;
+
+        const EPS = 0.05;
+
+        events.forEach(e => {
+          if (!sentIds.has(e.id) && Math.abs(t - e.time) <= EPS) {
+            sentIds.add(e.id);
+            sendPost(e.payload, e.id);
+          }
+        });
+      });
+    }
+
+    async function init() {
+      const video = document.getElementById('video');
+
+      const res = await fetch(EVENTS_URL);
+      const data = await res.json();
+      const fps = data.fps || 25;
+
+      events = data.events.map((e, idx) => ({
+        frame: e.frame,
+        time: e.time,
+        payload: e.payload,
+        id: e.id || `event_${idx}_frame_${e.frame}`
+      }));
+
+      log(`Загружено событий: ${events.length}, fps = ${fps}`);
+
+      if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
+        setupWithVideoFrameCallback(video, fps);
+      } else {
+        setupWithTimeupdate(video, fps);
+      }
+    }
+
+    init();
+</script>
+
+<style>
+    /* Контейнер 16:9 под видео и HUD */
+    .video-hud-wrapper {
+        position: relative;
+        max-width: 100%;
+        aspect-ratio: 16 / 9; /* 1920x1080 */
+        margin-bottom: 16px;
+    }
+
+    .video-hud-wrapper video,
+    .video-hud-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    /* Если HUD только отображает данные, а не интерактивный — так он не будет мешать кликам по плееру */
+    .video-hud-wrapper iframe {
+        pointer-events: none;
+    }
+
+    /* Если нужен интерактивный HUD — убери правило выше и подумай,
+       как ты хочешь, чтобы обрабатывались клики (HUD vs контролы видео) */
+
+    #log {
+      font-size: 14px;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 8px;
+      border-radius: 4px;
+      background: #fafafa;
+    }
+</style>
+{% endblock %}
