@@ -99,13 +99,15 @@ $(document).ready(function () {
   var meth = {
     getTeamOne: function () {
       if (!this.info.teams) return false;
-      if (!this.info.teams.team_left_id) return false;
-      return teams_data[this.info.teams.team_left_id];
+      const id = this.info.teams.team_left_id;
+      if (!id) return false;
+      return teams_data[id] ? teams_data[id] : false;
     },
     getTeamTwo: function () {
       if (!this.info.teams) return false;
-      if (!this.info.teams.team_right_id) return false;
-      return teams_data[this.info.teams.team_right_id];
+      const id = this.info.teams.team_right_id;
+      if (!id) return false;
+      return teams_data[id] ? teams_data[id] : false;
     },
     getTeamThree: function () {
       if (!this.info.teams) return false;
