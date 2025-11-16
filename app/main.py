@@ -39,6 +39,8 @@ def init_app():
     app.mount("/socket.io", socketio.ASGIApp(sio))
     app.sio = sio
 
+    app.player_list = set()
+
     app.mount("/js", StaticFiles(directory=os.path.join(get_assets_dir(), "js")), name="js")
     app.mount("/css", StaticFiles(directory=os.path.join(get_assets_dir(), "css")), name="css")
     app.mount("/icons", StaticFiles(directory=os.path.join(get_assets_dir(), "icons")), name="icons")
