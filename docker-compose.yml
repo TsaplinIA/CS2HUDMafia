@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  cs2hudA:
+    build: .
+    image: cs2hudmafia:latest
+    container_name: cs2hudA
+    restart: unless-stopped
+    environment:
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=8000
+    volumes:
+      - ./storage/A:/app/storage
+#    expose:
+#      - "8001"
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.services.cs2hudA.loadbalancer.server.port=8001"
+      - "traefik.http.routers.cs2hudA.entrypoints=http"
+      - "traefik.http.routers.cs2hudA.rule=Host(`cs2hudA.tsaplin.space`)"
+      - "traefik.http.routers.cs2hudA.middlewares=cs2hudA-https-headers"
+      - "traefik.http.routers.cs2hudA-secure.entrypoints=https"
+      - "traefik.http.routers.cs2hudA-secure.rule=Host(`cs2hudA.tsaplin.space`)"
+      - "traefik.http.routers.cs2hudA-secure.tls=true"
+      - "traefik.http.routers.cs2hudA-secure.tls.certresolver=le-regru"
+      - "traefik.http.routers.cs2hudA-secure.service=cs2hudA"
+      - "traefik.http.routers.cs2hudA-secure.middlewares=cs2hudA-https-headers"
+      - "traefik.http.middlewares.cs2hudA-https-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+
+  cs2hudB:
+    image: cs2hudmafia:latest
+    container_name: cs2hudB
+    restart: unless-stopped
+    environment:
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=8000
+    volumes:
+      - ./storage/B:/app/storage
+#    ports:
+#      - "8001"
+    depends_on:
+      - cs2hudA
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.services.cs2hudB.loadbalancer.server.port=8002"
+      - "traefik.http.routers.cs2hudB.entrypoints=http"
+      - "traefik.http.routers.cs2hudB.rule=Host(`cs2hudB.tsaplin.space`)"
+      - "traefik.http.routers.cs2hudB.middlewares=cs2hudB-https-headers"
+      - "traefik.http.routers.cs2hudB-secure.entrypoints=https"
+      - "traefik.http.routers.cs2hudB-secure.rule=Host(`cs2hudB.tsaplin.space`)"
+      - "traefik.http.routers.cs2hudB-secure.tls=true"
+      - "traefik.http.routers.cs2hudB-secure.tls.certresolver=le-regru"
+      - "traefik.http.routers.cs2hudB-secure.service=cs2hudB"
+      - "traefik.http.routers.cs2hudB-secure.middlewares=cs2hudB-https-headers"
+      - "traefik.http.middlewares.cs2hudB-https-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+
+networks:
+  proxy:
+    external: true
+    name: proxy
