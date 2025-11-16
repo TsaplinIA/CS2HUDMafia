@@ -20,6 +20,4 @@ RUN uv sync --frozen --no-dev
 
 COPY . .
 
-EXPOSE 8001
-
 CMD ["python", "server.py"]
