@@ -7,7 +7,8 @@ from typing import Any
 
 from starlette.requests import Request
 
-from app.utils.gsi import HUDGSI, compare_struct
+from app.database import get_session, Player as DBPlayer
+from app.utils.gsi import HUDGSI, compare_struct, Player as GSIPlayer
 
 
 class ResponseModel(BaseModel):
@@ -23,21 +24,6 @@ unexpected_fields_global = set()
 async def listen_gsi(request: Request, input_data: dict[str, Any]):
     await request.app.sio.emit("update", input_data)
     js = await request.body()
-
-    gsi_dict = json.loads(js)
-    unexpected_fields = compare_struct(HUDGSI, gsi_dict)
-    for unexpected_field in unexpected_fields:
-        if unexpected_field in unexpected_fields_global:
-            continue
-        unexpected_fields_global.add(unexpected_field)
-        unexpected_field_str = '.'.join(unexpected_field)
-        print(f"Unexpected field: {unexpected_field_str}")
-        content = gsi_dict
-        for key in unexpected_field:
-            content = content.get(key)
-        print(f"Example: {unexpected_field_str}: {content}")
-        if 'added' in unexpected_field:
-            print(gsi_dict['added'])
     try:
         gsi_obj: HUDGSI = hud_gsi_decoder.decode(js)
     except (msgspec.ValidationError, Exception) as e:
