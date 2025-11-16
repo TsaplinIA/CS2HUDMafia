@@ -151,8 +151,8 @@ $(document).ready(function () {
       return this.info.teamList[id] || false;
     },
     getMatchType: function () {
-      return this.info.teams && this.info.teams.match
-        ? this.info.teams.match
+      return this.info.teams && this.info.teams.match_type
+        ? this.info.teams.match_type
         : false;
     },
     getMatch: function () {
