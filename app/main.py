@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 import socketio
 from fastapi import FastAPI
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 from app.admin import admin
 from app.api.constants import constants_router
@@ -40,6 +41,8 @@ def init_app():
     app.sio = sio
 
     app.player_list = set()
+
+    app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
 
     app.mount("/js", StaticFiles(directory=os.path.join(get_assets_dir(), "js")), name="js")
     app.mount("/css", StaticFiles(directory=os.path.join(get_assets_dir(), "css")), name="css")
