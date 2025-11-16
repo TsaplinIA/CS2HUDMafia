@@ -20,4 +20,4 @@ RUN uv sync --frozen --no-dev
 
 COPY . .
 
-CMD ["python", "server.py"]
+CMD ["/app/.venv/bin/python", "server.py"]

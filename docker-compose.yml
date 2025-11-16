@@ -18,7 +18,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.services.cs2hudA.loadbalancer.server.port=8001"
+      - "traefik.http.services.cs2hudA.loadbalancer.server.port=8000"
       - "traefik.http.routers.cs2hudA.entrypoints=http"
       - "traefik.http.routers.cs2hudA.rule=Host(`cs2hudA.tsaplin.space`)"
       - "traefik.http.routers.cs2hudA.middlewares=cs2hudA-https-headers"
@@ -48,7 +48,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.services.cs2hudB.loadbalancer.server.port=8002"
+      - "traefik.http.services.cs2hudB.loadbalancer.server.port=8000"
       - "traefik.http.routers.cs2hudB.entrypoints=http"
       - "traefik.http.routers.cs2hudB.rule=Host(`cs2hudB.tsaplin.space`)"
       - "traefik.http.routers.cs2hudB.middlewares=cs2hudB-https-headers"
