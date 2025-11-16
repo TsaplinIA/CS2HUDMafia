@@ -44,7 +44,7 @@ async def sync_player_list(request: Request, players: dict[str, GSIPlayer]):
     if not players_set:
         return
     with get_session() as session:
-        existed_players = session.query(DBPlayer.id).filter(DBPlayer.id.in_(players_set)).all()
+        existed_players = session.query(DBPlayer.steam_id).filter(DBPlayer.steam_id.in_(players_set)).all()
         existed_players = {pid for (pid,) in existed_players}
 
         for steam_id in players_set:
