@@ -1,5 +1,6 @@
 from starlette.requests import Request
 from starlette_admin.contrib.sqla import Admin as SQLAAdmin
+from starlette_admin.views import Link
 
 from app.admin.match_page import match_page_view
 from app.admin.videoplayer import videoplayer_view
@@ -26,6 +27,10 @@ def init_admin(engine, title="Example: SQLAlchemy", base_url="/"):
     admin.add_view(players_model_view)
     admin.add_view(match_page_view)
     admin.add_view(videoplayer_view)
+    admin.add_view(Link(
+        "HUD page",
+        url="/huds/JT",
+    ))
 
     admin.templates.env.add_extension("pypugjs.ext.jinja.PyPugJSExtension")
     return admin
