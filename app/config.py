@@ -1,4 +1,5 @@
 import os
+import sys
 from json import JSONDecodeError
 from typing import Optional, Literal
 
@@ -15,7 +16,7 @@ class Settings(BaseSettings):
     server_port: int = 8001
     steam_apikey: str = "STEAM_APIKEY"
     database_name: str = "test.db"
-    storage_path: str = "../storage"
+    storage_path: str = "storage"
 
     class Config:
         env_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
@@ -32,23 +33,47 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
+def get_base_dir() -> str:
+    """
+    Папка приложения:
+    - при обычном запуске: корень проекта
+    - при запуске из exe: папка, где лежит server.exe
+    """
+    if getattr(sys, "frozen", False):
+        # PyInstaller
+        return os.path.dirname(sys.executable)
+    # обычный запуск — идём от этого файла вверх
+    return os.path.dirname(os.path.abspath(__file__))
+
+
+def get_resources_dir() -> str:
+    """
+    Папка, где лежат вшитые ресурсы:
+    - при обычном запуске: корень проекта (как раньше)
+    - при запуске из exe: временная папка PyInstaller (sys._MEIPASS)
+    """
+    if getattr(sys, "frozen", False):
+        # PyInstaller распаковывает туда --add-data
+        return sys._MEIPASS  # type: ignore[attr-defined]
+    return get_base_dir()
+
 
 def get_assets_dir() -> str:
-    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets")
+    return os.path.join(get_resources_dir(), "assets")
 
 
 def get_huds_dir() -> str:
-    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "huds")
+    return os.path.join(get_resources_dir(), "huds")
 
 
 def get_template_dir() -> str:
-    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "templates")
+    return os.path.join(get_assets_dir(), "templates")
 
 
 def get_storage_dir() -> str:
     if os.path.isabs(settings.storage_path):
         return settings.storage_path
-    return os.path.join(os.path.dirname(os.path.abspath(__file__)), settings.storage_path)
+    return os.path.join(get_base_dir(), settings.storage_path)
 
 
 constants_json_file_path: str = os.path.join(get_storage_dir(), "constants.json")
