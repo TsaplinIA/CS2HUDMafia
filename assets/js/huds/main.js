@@ -364,7 +364,7 @@ $(document).ready(function () {
       match = data;
     });
     socket.on("update", function (json) {
-      json.teams = match;
+      json.teams = constants;
       if (delay >= 0) {
         setTimeout(function () {
           create(json, players_data, teams_data);
@@ -403,5 +403,6 @@ $(document).ready(function () {
   }
   loadTeamsPool();
   loadPlayersPool();
+  loadConstantsPool();
   listener();
 });
