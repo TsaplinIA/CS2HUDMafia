@@ -49,8 +49,8 @@ function updatePage(data) {
     teams.right.name = team_two.team_name || teams.right.name;
     teams.left.short_name = team_one.short_name;
     teams.right.short_name = team_two.short_name;
-    teams.left.logo = team_one.logo || null;
-    teams.right.logo = team_two.logo || null;
+    teams.left.logo = team_one.logo_url || null;
+    teams.right.logo = team_two.logo_url || null;
     teams.left.flag = team_one.country_code || null;
     teams.right.flag = team_two.country_code || null;
   }
@@ -151,13 +151,13 @@ function updateTopPanel() {
 
   //#region Team Logos
   if (!teams.left.logo) {
-    teams.left.logo = "logo_" + teams.left.side.toLowerCase() + "_default.png";
+    teams.left.logo = "/files/img/elements/logo_" + teams.left.side.toLowerCase() + "_default.png";
   }
   if (!teams.right.logo) {
-    teams.right.logo = "logo_" + teams.right.side.toLowerCase() + "_default.png";
+    teams.right.logo = "/files/img/elements/logo_" + teams.right.side.toLowerCase() + "_default.png";
   }
-  $("#left_team #team_logo").attr("src", "/files/img/elements/" + teams.left.logo);
-  $("#right_team #team_logo").attr("src", "/files/img/elements/" + teams.right.logo);
+  $("#left_team #team_logo").attr("src", teams.left.logo);
+  $("#right_team #team_logo").attr("src", teams.right.logo);
   //#endregion
 
   //#region Team Flag
@@ -644,7 +644,7 @@ function fillObserved(obs) {
     }
 
   // Team Logo and Flags
-  $("#obs_team_img").attr("src", "/files/img/elements/" + _img);
+  $("#obs_team_img").attr("src", _img);
   if (disp_player_flags) {
     if (obs.hasOwnProperty("teamData")) {
       if (obs.teamData.hasOwnProperty("country_code")) {
