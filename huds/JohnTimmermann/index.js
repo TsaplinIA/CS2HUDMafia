@@ -641,6 +641,7 @@ function fillObserved(obs) {
         undefined;
     if (obs_avatar_url) {
         $("#obs_img").attr("src", obs_avatar_url);
+        $("#obs_avatar").css("opacity", 1);
     } else {
         $("#obs_avatar").css("opacity", 0);
     }
