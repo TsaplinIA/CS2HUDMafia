@@ -38,7 +38,7 @@ function loadPlayersPool() {
         timeout: 5000, // <-- максимальное время ожидания ответа
         success(data) {
             if (!data || !Array.isArray(data.players)) {
-                console.warn("loadTeamsPool: некорректный формат ответа", data);
+                console.warn("loadPlayersPool: некорректный формат ответа", data);
                 return;
             }
             let playersArray = data.players;
@@ -49,7 +49,7 @@ function loadPlayersPool() {
             players_data = players_data_new
         },
         error(err) {
-          console.warn("loadTeamsPool, продолжаем polling");
+          console.warn("loadPlayersPool, продолжаем polling");
         },
         complete() {
           // вызывается всегда — даже если ошибка
