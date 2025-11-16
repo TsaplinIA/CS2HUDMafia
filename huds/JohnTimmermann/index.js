@@ -73,45 +73,47 @@ function updatePage(data) {
 
 function setupBestOf(matchup, match) {
   if (matchup && matchup.toLowerCase() != "none") {
+      let left_map_count = match.left_team_map_count
+      let right_map_count = match.right_team_map_count
     if (matchup == "bo1") {
       $("#left_team .block2")
-        .css("opacity", "1")
-        .css("background-color", match.team_1.map_score >= 1 ? COLOR_WHITE : "");
+        .css("opacity", "0")
+        .css("background-color", left_map_count >= 1 ? COLOR_WHITE : "");
       $("#right_team .block2")
-        .css("opacity", "1")
-        .css("background-color", match.team_2.map_score >= 1 ? COLOR_WHITE : "");
+        .css("opacity", "0")
+        .css("background-color", right_map_count >= 1 ? COLOR_WHITE : "");
     } else if (matchup == "bo3") {
       $("#left_team .block4")
         .css("opacity", "1")
-        .css("background-color", match.team_1.map_score >= 1 ? COLOR_WHITE : "");
+        .css("background-color", left_map_count >= 1 ? COLOR_WHITE : "");
       $("#left_team .block5")
         .css("opacity", "1")
-        .css("background-color", match.team_1.map_score >= 2 ? COLOR_WHITE : "");
+        .css("background-color", left_map_count >= 2 ? COLOR_WHITE : "");
       $("#right_team .block4")
         .css("opacity", "1")
-        .css("background-color", match.team_2.map_score >= 1 ? COLOR_WHITE : "");
+        .css("background-color", right_map_count >= 1 ? COLOR_WHITE : "");
       $("#right_team .block5")
         .css("opacity", "1")
-        .css("background-color", match.team_2.map_score >= 2 ? COLOR_WHITE : "");
+        .css("background-color", right_map_count >= 2 ? COLOR_WHITE : "");
     } else if (matchup == "bo5") {
       $("#left_team .block1")
         .css("opacity", "1")
-        .css("background-color", match.team_1.map_score >= 1 ? COLOR_WHITE : "");
+        .css("background-color", left_map_count >= 1 ? COLOR_WHITE : "");
       $("#left_team .block2")
         .css("opacity", "1")
-        .css("background-color", match.team_1.map_score >= 2 ? COLOR_WHITE : "");
+        .css("background-color", left_map_count >= 2 ? COLOR_WHITE : "");
       $("#left_team .block3")
         .css("opacity", "1")
-        .css("background-color", match.team_1.map_score >= 3 ? COLOR_WHITE : "");
+        .css("background-color", left_map_count >= 3 ? COLOR_WHITE : "");
       $("#right_team .block1")
         .css("opacity", "1")
-        .css("background-color", match.team_2.map_score >= 1 ? COLOR_WHITE : "");
+        .css("background-color", right_map_count >= 1 ? COLOR_WHITE : "");
       $("#right_team .block2")
         .css("opacity", "1")
-        .css("background-color", match.team_2.map_score >= 2 ? COLOR_WHITE : "");
+        .css("background-color", right_map_count >= 2 ? COLOR_WHITE : "");
       $("#right_team .block3")
         .css("opacity", "1")
-        .css("background-color", match.team_2.map_score >= 3 ? COLOR_WHITE : "");
+        .css("background-color", right_map_count >= 3 ? COLOR_WHITE : "");
     }
   }
 }
