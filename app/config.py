@@ -15,8 +15,14 @@ class Settings(BaseSettings):
     server_host: str = "localhost"
     server_port: int = 8001
     steam_apikey: str = "STEAM_APIKEY"
-    database_name: str = "test.db"
+    POSTGRES_URL: str | None = None
     storage_path: str = "storage"
+
+    MINIO_HOST: str | None = None  # или "minio.my-domain.com"
+    MINIO_PORT: int | None = None  # если прокинешь через nginx на 443 — поставь 443 и secure=True
+    MINIO_ACCESS_KEY: str | None = None
+    MINIO_SECRET_KEY: str | None = None
+    MINIO_SECURE:bool = False  # True, если HTTPS
 
     class Config:
         env_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
@@ -30,6 +36,11 @@ class Settings(BaseSettings):
             self._upload_dir = os.path.join(get_storage_dir(), "upload")
         return self._upload_dir
 
+    @property
+    def database_url(self):
+        if self.POSTGRES_URL:
+            return self.POSTGRES_URL
+        return f"sqlite:///{os.path.join(get_storage_dir(), 'test.db')}"
 
 settings = Settings()
 
