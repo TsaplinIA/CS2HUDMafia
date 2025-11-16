@@ -1,32 +1,60 @@
 var avatars = {};
+let players_data = {};
+let teams_data = {};
 // var io = io(address);
 
-function load(cb) {
-  loadTeams(cb);
+function loadTeamsPool() {
+    $.ajax({
+        url: "/api/teams",
+        method: "GET",
+        timeout: 5000, // <-- максимальное время ожидания ответа
+        success(data) {
+            if (!data || !Array.isArray(data.teams)) {
+                console.warn("loadTeamsPool: некорректный формат ответа", data);
+                return;
+            }
+            let teamsArray = data.teams;
+            let teams_data_new = {};
+            teamsArray.forEach(function (team) {
+                teams_data_new[team.id] = team;
+            }, this);
+            teams_data = teams_data_new
+        },
+        error(err) {
+          console.warn("loadTeamsPool, продолжаем polling");
+        },
+        complete() {
+          // вызывается всегда — даже если ошибка
+          setTimeout(loadTeamsPool, 1000);
+        }
+    });
 }
 
-function loadTeams(cb) {
-  $.get("/api/teams", function (data) {
-    let teamsArray = data.teams;
-    let teams = {};
-
-    teamsArray.forEach(function (team) {
-      teams[team.id] = team;
-    }, this);
-    loadPlayers(cb, teams);
-  });
-}
-
-function loadPlayers(cb, teams) {
-  $.get("/api/players", function (data) {
-    let playersArray = data.players;
-    let players = {};
-
-    playersArray.forEach(function (player) {
-      players[player.sid] = player;
-    }, this);
-    cb(players, teams);
-  });
+function loadPlayersPool() {
+    $.ajax({
+        url: "/api/players",
+        method: "GET",
+        timeout: 5000, // <-- максимальное время ожидания ответа
+        success(data) {
+            if (!data || !Array.isArray(data.players)) {
+                console.warn("loadTeamsPool: некорректный формат ответа", data);
+                return;
+            }
+            let playersArray = data.players;
+            let players_data_new = {};
+            playersArray.forEach(function (player) {
+                players_data_new[player.steam_id] = player;
+            }, this);
+            players_data = players_data_new
+        },
+        error(err) {
+          console.warn("loadTeamsPool, продолжаем polling");
+        },
+        complete() {
+          // вызывается всегда — даже если ошибка
+          setTimeout(loadPlayersPool, 1000);
+        }
+    });
 }
 
 function loadAvatar(steamid, callback) {
@@ -41,7 +69,6 @@ function loadAvatar(steamid, callback) {
 }
 
 $(document).ready(function () {
-  console.log(io)
   const socket = io(address, {
     path: "/socket.io",
     transports: ["websocket"], // Указываем транспорты
@@ -321,87 +348,7 @@ $(document).ready(function () {
       }
     }
   }
-  /*
-  CSGOGSI.prototype.digestMIRV = function (raw) {
-    if (!this.last) {
-      return null;
-    }
-    var data = raw.keys;
-    var killer = this.last.players.filter(function (player) {
-      return player.steamid === data.attacker.xuid;
-    })[0];
-    var victim = this.last.players.filter(function (player) {
-      return player.steamid === data.userid.xuid;
-    })[0];
-    var assister = this.last.players.filter(function (player) {
-      return (
-        player.steamid === data.assister.xuid && data.assister.xuid !== "0"
-      );
-    })[0];
-    if (!killer || !victim) {
-      return null;
-    }
-
-    var kill = {
-      killer: killer,
-      victim: victim,
-      assister: assister || null,
-      flashed: data.assistedflash,
-      headshot: data.headshot,
-      weapon: data.weapon,
-      wallbang: data.penetrated > 0,
-      attackerblind: data.attackerblind,
-      thrusmoke: data.thrusmoke,
-      noscope: data.noscope,
-    };
-
-    const killIcon = (iconName, show) =>
-      `<div class="kill-icon ${
-        show ? "show" : ""
-      }"><img src="./elements/${iconName}.png" /></div>`;
-
-    const killfeedEntry = (kill) => {
-      const assistHTML = kill.assister
-        ? `
-		  <div class="assist-container">
-			<div class="plus">+</div>
-			${killIcon("flashed", kill.flashed)}
-			<div class="assist-name ${kill.assister.team.side}">${kill.assister.name}</div>
-		  </div>
-		  `
-        : ``;
-      const html = `
-		  <div class="kill-container"><div class="kill">
-			${killIcon("attackerblind", kill.attackerblind)}
-			<div class="killer-name ${kill.killer.team.side}">${kill.killer.name}</div>
-			${assistHTML}
-			<div class="kill-weapon">
-			  <img src="/files/img/weapons/${kill.weapon}.png" />
-			</div>
-			${killIcon("noscope", kill.noscope)}
-			${killIcon("thrusmoke", kill.thrusmoke)}
-			${killIcon("wallbang", kill.wallbang)}
-			${killIcon("headshot", kill.headshot)}
-			<div class="victim-name ${kill.victim.team.side}">${kill.victim.name}</div>
-			</div> </div>
-		`;
-      return html;
-    };
-    const addKill = (kill) => {
-      const killHTML = killfeedEntry(kill);
-      $("#killfeed").append($(killHTML));
-    };
-
-    GSI.on("kill", (kill) => {
-      addKill(kill);
-      http.kill();
-    });
-
-    this.execute("kill", kill);
-    return kill;
-  };
-*/
-  function listener(players, teams) {
+  function listener() {
     socket.on("match", function (data) {
       match = data;
     });
@@ -409,7 +356,7 @@ $(document).ready(function () {
       json.teams = match;
       if (delay >= 0) {
         setTimeout(function () {
-          create(json, players, teams);
+          create(json, players_data, teams_data);
           updatePage(integ);
         }, delay * 1000);
       }
@@ -443,5 +390,7 @@ $(document).ready(function () {
       toggleFreezetime(data);
     });
   }
-  load(listener);
+  loadTeamsPool();
+  loadPlayersPool();
+  listener();
 });
