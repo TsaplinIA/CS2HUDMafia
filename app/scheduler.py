@@ -38,5 +38,5 @@ async def update_steam_data_task():
 async def init_scheduler():
     scheduler = AsyncIOScheduler()
     scheduler.add_job(func=save_constants_task, trigger=IntervalTrigger(seconds=5))
-    scheduler.add_job(func=update_steam_data_task, trigger=IntervalTrigger(minutes=5))
+    scheduler.add_job(func=update_steam_data_task, trigger=IntervalTrigger(minutes=1))
     return scheduler
