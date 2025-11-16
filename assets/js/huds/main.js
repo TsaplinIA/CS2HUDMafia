@@ -99,11 +99,13 @@ $(document).ready(function () {
   var meth = {
     getTeamOne: function () {
       if (!this.info.teams) return false;
-      return this.loadTeam(this.info.teams.team_1.team);
+      if (!this.info.teams.team_left_id) return false;
+      return teams_data[this.info.teams.team_left_id];
     },
     getTeamTwo: function () {
       if (!this.info.teams) return false;
-      return this.loadTeam(this.info.teams.team_2.team);
+      if (!this.info.teams.team_right_id) return false;
+      return teams_data[this.info.teams.team_right_id];
     },
     getTeamThree: function () {
       if (!this.info.teams) return false;
