@@ -2,7 +2,7 @@ from fastapi import HTTPException, APIRouter
 from pydantic import BaseModel, ValidationError
 from typing import Any
 
-from app.config import constants
+from app.config import constants, Constants
 
 
 class ResponseModel(BaseModel):
@@ -26,3 +26,7 @@ async def validate_fields(input_data: dict[str, Any]):
     for key, value in valid_data.items():
         setattr(constants, key, value)
     return {"message": "OK"}
+
+@constants_router.get("/", response_model=Constants, status_code=200)
+async def get_constants():
+    return constants
