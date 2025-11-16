@@ -1,6 +1,7 @@
 var avatars = {};
 let players_data = {};
 let teams_data = {};
+let constants = {};
 // var io = io(address);
 
 function loadTeamsPool() {
@@ -57,15 +58,23 @@ function loadPlayersPool() {
     });
 }
 
-function loadAvatar(steamid, callback) {
-  if (!avatars[steamid]) {
-    $.get("/av/" + steamid, function () {
-      avatars[steamid] = true;
-      if (callback) callback();
+
+function loadConstantsPool() {
+    $.ajax({
+        url: "/constants/",
+        method: "GET",
+        timeout: 5000, // <-- максимальное время ожидания ответа
+        success(data) {
+            constants = data;
+        },
+        error(err) {
+          console.warn("loadConstantsPool, продолжаем polling", err);
+        },
+        complete() {
+          // вызывается всегда — даже если ошибка
+          setTimeout(loadConstantsPool, 1000);
+        }
     });
-  } else if (callback) {
-    callback();
-  }
 }
 
 $(document).ready(function () {
