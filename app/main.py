@@ -16,7 +16,6 @@ from fastapi.staticfiles import StaticFiles
 from app.huds_app import hud_router
 from app.logging_filters import init_logging_config
 from app.scheduler import init_scheduler
-from app.utils.fake_loop import fake_loop
 
 
 @asynccontextmanager
@@ -24,12 +23,10 @@ async def lifespan(app: FastAPI, *args, **kwargs):
     print("FastAPI start")
     scheduler = await init_scheduler()
     scheduler.start()
-    fake_loop.start()
 
     yield
 
     scheduler.shutdown()
-    fake_loop.stop()
     print("FastAPI shutdown")
 
 
