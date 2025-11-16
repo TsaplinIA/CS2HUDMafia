@@ -631,25 +631,17 @@ function fillObserved(obs) {
       _img = teams.right.logo;
     }
   }
-  if (disp_avatars) {
-    if (disp_player_avatars) {
-      if (obs.hasOwnProperty("avatar")) {
-        // Custom Set Avatar
-        if (obs.avatar) $("#obs_img").attr("src", "/storage/" + obs.avatar);
-      } else {
-        // Just Use Team Logo
-        loadAvatar(obs.steamid, function () {
-          $("#obs_img").attr("src", "/files/avatars/" + obs.steamid + ".png");
-        });
-      }
+    const obs_player_data = players_data[obs.steamid];
+
+    const obs_avatar_url =
+        obs_player_data?.avatar_url ??
+        obs_player_data?.steam_avatar_url ??
+        undefined;
+    if (obs_avatar_url) {
+        $("#obs_img").attr("src", obs_avatar_url);
     } else {
-      loadAvatar(obs.steamid, function () {
-        $("#obs_img").attr("src", "/av/" + obs.steamid);
-      });
+        $("#obs_avatar").css("opacity", 0);
     }
-  } else {
-    $("#obs_avatar").css("opacity", 0);
-  }
 
   // Team Logo and Flags
   $("#obs_team_img").attr("src", "/files/img/elements/" + _img);
