@@ -54,7 +54,7 @@ def get_base_dir() -> str:
         # PyInstaller
         return os.path.dirname(sys.executable)
     # обычный запуск — идём от этого файла вверх
-    return os.path.dirname(os.path.abspath(__file__))
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def get_resources_dir() -> str:
