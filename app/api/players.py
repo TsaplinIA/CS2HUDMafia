@@ -34,7 +34,7 @@ async def get_players(request: Request):
                 displayed_name=player.displayed_name,
                 team_id=player.team_id,
                 avatar_url=avatar_url,
-                steam_avatar_url=player.steam_avatar_medium,
+                steam_avatar_url=player.steam_avatar_full,
             )
             res.append(p)
     return {"players": res}
