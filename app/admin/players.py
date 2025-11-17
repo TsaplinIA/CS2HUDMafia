@@ -110,7 +110,10 @@ class PlayerView(ModelView):
         "displayed_name",
         "team",
     ]
-    fields_default_sort = ["team"]
+    sortable_field_mapping = {
+        "team_field": Player.team_id,  # или Player.team_id, как удобнее
+    }
+    fields_default_sort = ["team_field"]
     exclude_fields_from_list = [
         Player.id,
         Player.steam_id,
@@ -122,8 +125,9 @@ class PlayerView(ModelView):
     exclude_fields_from_create = [Player.id, "names", "steam_id_copy", "avatars", "team_field"]
     exclude_fields_from_edit = [Player.id, "names", "steam_id_copy", "avatars", "team_field"]
 
-    sortable_fields = ["steam_id", "team"]
+    sortable_fields = ["team_field"]
     searchable_fields = ["real_name", "displayed_name", "team", "steam_id", "id"]
+    save_state: bool = False
 
     async def before_create(self, request: Request, data: dict[str, Any], obj: Any) -> None:
         steam_id = data["steam_id"]
