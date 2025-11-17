@@ -11,6 +11,8 @@
         background-repeat: no-repeat;
         cursor: pointer;
         pointer-events: auto;
+        border: 3px solid #ccc;   /* тонкая рамка — опционально */
+        transition: transform .15s ease;
     }
     .toggle-btn.disabled {
         opacity: 0.5;
@@ -22,7 +24,7 @@
         <div class="row">
             <div class="col-5">
                 <div class="p-2 d-flex align-middle align-items-center justify-content-center">
-                    <span class="toggle-btn w-4 h-4 rounded-circle
+                    <span class="toggle-btn w-6 h-6 rounded-circle
                     {% if constants.attack_team == 'team_left' %}team-t{% else %}team-ct{% endif %}
                     {% if constants.team_side_auto_detect %}disabled{% endif %}"
                     id="left_team_side"
@@ -33,7 +35,7 @@
             <div class="col-2"><span class=""></span></div>
             <div class="col-5">
                 <div class="p-2 d-flex align-middle align-items-center justify-content-center">
-                    <span class="toggle-btn w-4 h-4 rounded-circle
+                    <span class="toggle-btn w-6 h-6 rounded-circle
                     {% if constants.attack_team == 'team_left' %}team-ct{% else %}team-t{% endif %}
                     {% if constants.team_side_auto_detect %}disabled{% endif %}"
                     id="right_team_side"
