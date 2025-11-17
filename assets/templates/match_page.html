@@ -28,61 +28,9 @@
                 <div class="card-body">
                     <div class="list-group card-list-group">
                         {% include "match_page_teams.html" %}
-                        {% include "match_page_sides.html" %}
+<!--                        {% include "match_page_sides.html" %}-->
                         {% include "match_page_BON.html" %}
                         {% include "match_page_refresh.html"%}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 m-lg-0 mt-4">
-            <div class="row row-cards">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Top publishers</h3>
-                        </div>
-                        <div class="card-body">
-<!--                            {% for user in users %}-->
-<!--                            <div class="row g-3 align-items-center mb-3">-->
-<!--                                <a href="#" class="col-auto">-->
-<!--                                <span class="avatar"  {% if user.avatar%}style="background-image: url({{ url_for(__name__ ~ ':api:file', storage=user.avatar.upload_storage,file_id=user.avatar.file_id)}})"{%endif%}>{% if not user.avatar%}{{user.full_name[0]}}{%endif%}</span>-->
-<!--                                </a>-->
-<!--                                <div class="col text-truncate">-->
-<!--                                    <a href="{{ url_for(__name__ ~ ':detail', identity='user',pk=user.id)}}" class="text-reset d-block text-truncate">-->
-<!--                                        {{user.full_name}}</a>-->
-<!--                                    <div class="text-muted text-truncate mt-n1">{{user.posts | length}} posts</div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            {%endfor%}-->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-stamp">
-                            <div class="card-stamp-icon bg-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-info-circle"
-                                     width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <circle cx="12" cy="12" r="9"></circle>
-                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                                    <polyline points="11 12 12 12 12 16 13 16"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div>
-                                <p>
-                                    This page is a <strong>custom home page</strong> which load
-                                    the latest posts and top publishers from database and display them.
-                                </p>
-                                <p>
-                                    For more information, check out the <a href="https://jowilf.github.io/starlette-admin/tutorial/configurations/other-views/#customview">StarletteAdmin doc</a>.
-                                </p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
