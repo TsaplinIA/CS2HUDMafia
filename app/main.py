@@ -10,6 +10,7 @@ from app.api.constants import constants_router
 from app.api.gsi import gsi_router
 from app.api.players import players_router
 from app.api.teams import teams_router
+from app.api.utils import utils_router
 from app.config import get_assets_dir, get_huds_dir
 from app.database import Base, engine
 from fastapi.staticfiles import StaticFiles
@@ -53,6 +54,7 @@ def init_app():
     app.include_router(constants_router)
     app.include_router(gsi_router)
     app.include_router(hud_router)
+    app.include_router(utils_router)
     app.include_router(teams_router, prefix="/api")
     app.include_router(players_router, prefix="/api")
 
