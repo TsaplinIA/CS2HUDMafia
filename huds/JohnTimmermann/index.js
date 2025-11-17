@@ -42,8 +42,10 @@ function updatePage(data) {
 
   var test_player = data.getPlayer(1);
   if (test_player) {
-    teams.left = test_player.team.toLowerCase() == "ct" ? team_ct : team_t;
-    teams.right = test_player.team.toLowerCase() != "ct" ? team_ct : team_t;
+    teams.left = team_t;   // слева всегда атака (T)
+    teams.right = team_ct; // справа всегда защита (CT)
+    // teams.left = test_player.team.toLowerCase() == "ct" ? team_ct : team_t;
+    // teams.right = test_player.team.toLowerCase() != "ct" ? team_ct : team_t;
 
     teams.left.name = team_one.team_name || teams.left.name;
     teams.right.name = team_two.team_name || teams.right.name;
